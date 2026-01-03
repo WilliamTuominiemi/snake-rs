@@ -36,6 +36,8 @@ impl Game {
 
         let mut stdout = io::stdout();
 
+        stdout.execute(cursor::Hide)?;
+
         while !self.quit {
             if event::poll(Duration::from_millis(100))? {
                 if let Event::Key(key_event) = event::read()? {
@@ -60,6 +62,8 @@ impl Game {
         }
 
         terminal::disable_raw_mode()?;
+        stdout.execute(cursor::Show)?;
+
         Ok(())
     }
 
@@ -104,8 +108,6 @@ fn draw_walls(
 }
 
 fn draw_player(stdout: &mut io::Stdout, x: u16, y: u16) -> Result<(), Box<dyn std::error::Error>> {
-    stdout.execute(cursor::Hide)?;
-
     stdout
         .queue(cursor::MoveTo(x, y))?
         .queue(style::PrintStyledContent("█".blue()))?;
