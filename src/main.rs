@@ -7,13 +7,32 @@ use crossterm::{
 use std::io::{self, Write};
 use std::time::Duration;
 
+enum direction {
+    Up,
+    Right,
+    Down,
+    Left,
+}
+
 struct Game {
     quit: bool,
+    width: u16,
+    height: u16,
+    player_x: u16,
+    player_y: u16,
+    player_dir: direction,
 }
 
 impl Game {
     pub fn new() -> Self {
-        Self { quit: false }
+        Self {
+            quit: false,
+            width: 20,
+            height: 10,
+            player_x: 5,
+            player_y: 5,
+            player_dir: direction::Right,
+        }
     }
 
     pub fn update(&mut self) -> io::Result<()> {
@@ -36,17 +55,37 @@ impl Game {
                 .execute(cursor::MoveTo(0, 0))?;
             println!("test");
 
-            let width = 20;
-            let height = 10;
+            draw(draw_walls(&mut stdout, self.width, self.height));
+            draw(draw_player(&mut stdout, self.player_x, self.player_y));
 
-            draw(draw_walls(&mut stdout, width, height));
-            draw(draw_player(&mut stdout, 5, 5));
+            self.update_player_position();
 
             stdout.flush()?;
         }
 
         terminal::disable_raw_mode()?;
         Ok(())
+    }
+
+    fn update_player_position(&mut self) {
+        match self.player_dir {
+            direction::Up => self.player_y += 1,
+            direction::Right => self.player_x += 1,
+            direction::Down => self.player_y -= 1,
+            direction::Left => self.player_x -= 1,
+        }
+
+        if self.player_x == 0 {
+            self.player_x = self.width;
+        } else if self.player_x >= self.width - 2 {
+            self.player_x = 0;
+        }
+
+        if self.player_y == 0 {
+            self.player_y = self.height;
+        } else if self.player_y >= self.height - 1 {
+            self.player_y = 0;
+        }
     }
 }
 
