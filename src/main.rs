@@ -8,16 +8,12 @@ use std::io::{self, Write};
 use std::time::Duration;
 
 struct Game {
-    refresh_rate: u8,
     quit: bool,
 }
 
 impl Game {
-    pub fn new(refresh_rate: u8) -> Self {
-        Self {
-            refresh_rate,
-            quit: false,
-        }
+    pub fn new() -> Self {
+        Self { quit: false }
     }
 
     pub fn update(&mut self) -> io::Result<()> {
@@ -79,7 +75,7 @@ fn draw(result: Result<(), Box<dyn std::error::Error>>) {
 }
 
 fn main() -> io::Result<()> {
-    let mut game = Game::new(60);
+    let mut game = Game::new();
     game.update()?;
     Ok(())
 }
