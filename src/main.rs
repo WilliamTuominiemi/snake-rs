@@ -40,6 +40,7 @@ impl Game {
             let height = 10;
 
             draw(draw_walls(&mut stdout, width, height));
+            draw(draw_player(&mut stdout, 5, 5));
 
             stdout.flush()?;
         }
@@ -63,6 +64,19 @@ fn draw_walls(
             }
         }
     }
+
+    Ok(())
+}
+
+fn draw_player(stdout: &mut io::Stdout, x: u16, y: u16) -> Result<(), Box<dyn std::error::Error>> {
+    stdout.execute(cursor::Hide)?;
+
+    stdout
+        .queue(cursor::MoveTo(x, y))?
+        .queue(style::PrintStyledContent("█".blue()))?;
+    stdout
+        .queue(cursor::MoveTo(x + 1, y))?
+        .queue(style::PrintStyledContent("█".blue()))?;
 
     Ok(())
 }
