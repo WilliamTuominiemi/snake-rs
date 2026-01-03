@@ -7,12 +7,8 @@ use crossterm::{
 use std::io::{self, Write};
 use std::time::Duration;
 
-enum direction {
-    Up,
-    Right,
-    Down,
-    Left,
-}
+use direction::Direction;
+mod direction;
 
 struct Game {
     quit: bool,
@@ -20,7 +16,7 @@ struct Game {
     height: u16,
     player_x: u16,
     player_y: u16,
-    player_dir: direction,
+    player_dir: Direction,
 }
 
 impl Game {
@@ -31,7 +27,7 @@ impl Game {
             height: 10,
             player_x: 5,
             player_y: 5,
-            player_dir: direction::Right,
+            player_dir: Direction::Right,
         }
     }
 
@@ -69,10 +65,10 @@ impl Game {
 
     fn update_player_position(&mut self) {
         match self.player_dir {
-            direction::Up => self.player_y += 1,
-            direction::Right => self.player_x += 1,
-            direction::Down => self.player_y -= 1,
-            direction::Left => self.player_x -= 1,
+            Direction::Up => self.player_y += 1,
+            Direction::Right => self.player_x += 1,
+            Direction::Down => self.player_y -= 1,
+            Direction::Left => self.player_x -= 1,
         }
 
         if self.player_x == 0 {
