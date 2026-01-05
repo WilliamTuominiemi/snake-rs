@@ -1,4 +1,4 @@
-use crate::direction::{self, Direction};
+use crate::direction::Direction;
 
 pub struct Snake {
     x: u16,

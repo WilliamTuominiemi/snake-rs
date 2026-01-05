@@ -1,7 +1,7 @@
 use crossterm::style::Color;
 use crossterm::{
     ExecutableCommand, QueueableCommand, cursor,
-    event::{self, Event, KeyCode, KeyEvent},
+    event::{self, Event, KeyCode},
     style::{self, Stylize},
     terminal,
 };
@@ -30,7 +30,7 @@ impl Game {
     }
 
     pub fn update(&mut self) -> io::Result<()> {
-        terminal::enable_raw_mode();
+        terminal::enable_raw_mode()?;
 
         let mut stdout = io::stdout();
 
