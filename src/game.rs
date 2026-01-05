@@ -1,3 +1,4 @@
+use crossterm::style::Color;
 use crossterm::{
     ExecutableCommand, QueueableCommand, cursor,
     event::{self, Event, KeyCode, KeyEvent},
@@ -85,9 +86,7 @@ impl Game {
         for y in 0..height {
             for x in 0..width {
                 if (y == 0 || y == height - 1) || (x == 0 || x == width - 1) {
-                    stdout
-                        .queue(cursor::MoveTo(x, y))?
-                        .queue(style::PrintStyledContent("█".green()))?;
+                    self.draw_pixel_at_position(stdout, x, y, Color::Green)?;
                 }
             }
         }
@@ -101,12 +100,22 @@ impl Game {
         x: u16,
         y: u16,
     ) -> Result<(), Box<dyn std::error::Error>> {
+        self.draw_pixel_at_position(stdout, x, y, Color::Blue)?;
+        self.draw_pixel_at_position(stdout, x + 1, y, Color::Blue)?;
+
+        Ok(())
+    }
+
+    fn draw_pixel_at_position(
+        &self,
+        stdout: &mut io::Stdout,
+        x: u16,
+        y: u16,
+        color: Color,
+    ) -> Result<(), Box<dyn std::error::Error>> {
         stdout
             .queue(cursor::MoveTo(x, y))?
-            .queue(style::PrintStyledContent("█".blue()))?;
-        stdout
-            .queue(cursor::MoveTo(x + 1, y))?
-            .queue(style::PrintStyledContent("█".blue()))?;
+            .queue(style::PrintStyledContent("█".with(color)))?;
 
         Ok(())
     }
