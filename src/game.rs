@@ -36,7 +36,7 @@ impl Game {
 
         stdout.execute(cursor::Hide)?;
 
-        let apple = Apple::new(self.width, self.height);
+        let mut apple = Apple::new(self.width, self.height);
 
         while !self.quit {
             if event::poll(Duration::from_millis(100))? {
@@ -65,6 +65,7 @@ impl Game {
             ));
 
             self.update_player_position();
+            self.snake.check_collision(&mut apple);
 
             stdout.flush()?;
         }

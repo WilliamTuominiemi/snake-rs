@@ -1,4 +1,4 @@
-use crate::direction::Direction;
+use crate::{apple::Apple, direction::Direction};
 
 pub struct Snake {
     x: u16,
@@ -65,6 +65,12 @@ impl Snake {
                 }
             }
         };
+    }
+
+    pub fn check_collision(&mut self, apple: &mut Apple) {
+        if apple.position() == self.position() {
+            apple.replace();
+        }
     }
 }
 
