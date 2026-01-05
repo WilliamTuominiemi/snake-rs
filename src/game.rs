@@ -39,6 +39,10 @@ impl Game {
                 if let Event::Key(key_event) = event::read()? {
                     match key_event.code {
                         KeyCode::Char('q') => self.quit = true,
+                        KeyCode::Up => self.snake.change_direction(Direction::Up),
+                        KeyCode::Right => self.snake.change_direction(Direction::Right),
+                        KeyCode::Down => self.snake.change_direction(Direction::Down),
+                        KeyCode::Left => self.snake.change_direction(Direction::Left),
                         _ => {}
                     }
                 }

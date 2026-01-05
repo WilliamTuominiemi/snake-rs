@@ -21,25 +21,29 @@ impl Snake {
 
     pub fn update_position(&mut self) {
         match self.direction {
-            Direction::Up => self.y += 1,
+            Direction::Up => self.y -= 1,
             Direction::Right => self.x += 1,
-            Direction::Down => self.y -= 1,
+            Direction::Down => self.y += 1,
             Direction::Left => self.x -= 1,
         }
     }
 
     pub fn keep_within_bounds(&mut self, width: u16, height: u16) {
         if self.x == 0 {
-            self.x = width;
+            self.x = width - 3;
         } else if self.x >= width - 2 {
-            self.x = 0;
+            self.x = 1;
         }
 
         if self.y == 0 {
-            self.y = height;
+            self.y = height - 2;
         } else if self.y >= height - 1 {
-            self.y = 0;
+            self.y = 1;
         }
+    }
+
+    pub fn change_direction(&mut self, direction: Direction) {
+        self.direction = direction;
     }
 }
 
@@ -84,7 +88,7 @@ mod tests {
         snake_outside_bounds.keep_within_bounds(width, height);
         let (x, y) = snake_outside_bounds.position();
 
-        assert_eq!(0, x);
-        assert_eq!(0, y);
+        assert_eq!(1, x);
+        assert_eq!(1, y);
     }
 }
