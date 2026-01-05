@@ -106,6 +106,18 @@ impl Game {
         Ok(())
     }
 
+    fn draw_fruit(
+        &self,
+        stdout: &mut io::Stdout,
+        x: u16,
+        y: u16,
+    ) -> Result<(), Box<dyn std::error::Error>> {
+        self.draw_pixel_at_position(stdout, x, y, Color::Red)?;
+        self.draw_pixel_at_position(stdout, x + 1, y, Color::Red)?;
+
+        Ok(())
+    }
+
     fn draw_pixel_at_position(
         &self,
         stdout: &mut io::Stdout,
