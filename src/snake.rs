@@ -43,7 +43,28 @@ impl Snake {
     }
 
     pub fn change_direction(&mut self, direction: Direction) {
-        self.direction = direction;
+        match self.direction {
+            Direction::Up => {
+                if direction != Direction::Down {
+                    self.direction = direction;
+                }
+            }
+            Direction::Right => {
+                if direction != Direction::Left {
+                    self.direction = direction;
+                }
+            }
+            Direction::Down => {
+                if direction != Direction::Up {
+                    self.direction = direction;
+                }
+            }
+            Direction::Left => {
+                if direction != Direction::Right {
+                    self.direction = direction;
+                }
+            }
+        };
     }
 }
 
