@@ -8,14 +8,13 @@ use std::io::{self, Write};
 use std::time::Duration;
 
 use crate::direction::Direction;
+use crate::snake::Snake;
 
 pub struct Game {
     quit: bool,
     width: u16,
     height: u16,
-    player_x: u16,
-    player_y: u16,
-    player_dir: Direction,
+    snake: Snake,
 }
 
 impl Game {
@@ -24,9 +23,7 @@ impl Game {
             quit: false,
             width: 20,
             height: 10,
-            player_x: 5,
-            player_y: 5,
-            player_dir: Direction::Right,
+            snake: Snake::new(5, 5),
         }
     }
 
@@ -53,7 +50,11 @@ impl Game {
             println!("test");
 
             self.draw(self.draw_walls(&mut stdout, self.width, self.height));
-            self.draw(self.draw_player(&mut stdout, self.player_x, self.player_y));
+            self.draw(self.draw_player(
+                &mut stdout,
+                self.snake.position().0,
+                self.snake.position().1,
+            ));
 
             self.update_player_position();
 
@@ -67,24 +68,8 @@ impl Game {
     }
 
     fn update_player_position(&mut self) {
-        match self.player_dir {
-            Direction::Up => self.player_y += 1,
-            Direction::Right => self.player_x += 1,
-            Direction::Down => self.player_y -= 1,
-            Direction::Left => self.player_x -= 1,
-        }
-
-        if self.player_x == 0 {
-            self.player_x = self.width;
-        } else if self.player_x >= self.width - 2 {
-            self.player_x = 0;
-        }
-
-        if self.player_y == 0 {
-            self.player_y = self.height;
-        } else if self.player_y >= self.height - 1 {
-            self.player_y = 0;
-        }
+        self.snake.update_position();
+        self.snake.keep_within_bounds(self.width, self.height);
     }
 
     fn draw_walls(
