@@ -8,6 +8,7 @@ use crossterm::{
 use std::io::{self, Write};
 use std::time::Duration;
 
+use crate::apple::Apple;
 use crate::direction::Direction;
 use crate::snake::Snake;
 
@@ -35,6 +36,8 @@ impl Game {
 
         stdout.execute(cursor::Hide)?;
 
+        let apple = Apple::new(self.width, self.height);
+
         while !self.quit {
             if event::poll(Duration::from_millis(100))? {
                 if let Event::Key(key_event) = event::read()? {
@@ -52,9 +55,9 @@ impl Game {
             stdout
                 .execute(terminal::Clear(terminal::ClearType::All))?
                 .execute(cursor::MoveTo(0, 0))?;
-            println!("test");
 
             self.draw(self.draw_walls(&mut stdout, self.width, self.height));
+            self.draw(self.draw_apple(&mut stdout, &apple));
             self.draw(self.draw_player(
                 &mut stdout,
                 self.snake.position().0,
@@ -106,12 +109,13 @@ impl Game {
         Ok(())
     }
 
-    fn draw_fruit(
+    fn draw_apple(
         &self,
         stdout: &mut io::Stdout,
-        x: u16,
-        y: u16,
+        apple: &Apple,
     ) -> Result<(), Box<dyn std::error::Error>> {
+        let (x, y) = apple.position();
+
         self.draw_pixel_at_position(stdout, x, y, Color::Red)?;
         self.draw_pixel_at_position(stdout, x + 1, y, Color::Red)?;
 

@@ -13,4 +13,8 @@ impl Apple {
             y: rng.random_range(2..height - 2),
         }
     }
+
+    pub fn position(&self) -> (u16, u16) {
+        return (self.x, self.y);
+    }
 }
