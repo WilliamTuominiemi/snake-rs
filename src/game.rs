@@ -10,6 +10,7 @@ use std::time::Duration;
 
 use crate::apple::Apple;
 use crate::direction::Direction;
+use crate::position::Position;
 use crate::snake::Snake;
 
 pub struct Game {
@@ -58,11 +59,7 @@ impl Game {
 
             self.draw(self.draw_walls(&mut stdout, self.width, self.height));
             self.draw(self.draw_apple(&mut stdout, &apple));
-            self.draw(self.draw_player(
-                &mut stdout,
-                self.snake.position().x,
-                self.snake.position().y,
-            ));
+            self.draw(self.draw_player(&mut stdout, self.snake.nodes()));
 
             self.update_player_position();
             self.snake.check_collision(&mut apple);
@@ -101,11 +98,12 @@ impl Game {
     fn draw_player(
         &self,
         stdout: &mut io::Stdout,
-        x: u16,
-        y: u16,
+        positions: Vec<Position>,
     ) -> Result<(), Box<dyn std::error::Error>> {
-        self.draw_pixel_at_position(stdout, x, y, Color::Blue)?;
-        self.draw_pixel_at_position(stdout, x + 1, y, Color::Blue)?;
+        for position in positions {
+            self.draw_pixel_at_position(stdout, position.x, position.y, Color::Blue)?;
+            self.draw_pixel_at_position(stdout, position.x + 1, position.y, Color::Blue)?;
+        }
 
         Ok(())
     }

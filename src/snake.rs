@@ -3,6 +3,7 @@ use crate::{apple::Apple, direction::Direction, position::Position};
 pub struct Snake {
     position: Position,
     direction: Direction,
+    positions: Vec<Position>,
 }
 
 impl Snake {
@@ -10,11 +11,16 @@ impl Snake {
         Snake {
             position: Position { x, y },
             direction: Direction::Right,
+            positions: vec![Position { x, y }],
         }
     }
 
     pub fn position(&self) -> Position {
         return self.position.clone();
+    }
+
+    pub fn nodes(&self) -> Vec<Position> {
+        return self.positions.clone();
     }
 
     pub fn update_position(&mut self) {
@@ -24,6 +30,8 @@ impl Snake {
             Direction::Down => self.position.update(0, 1),
             Direction::Left => self.position.update(-1, 0),
         }
+        self.positions.insert(0, self.position.clone());
+        self.positions.pop();
     }
 
     pub fn keep_within_bounds(&mut self, width: u16, height: u16) {
@@ -68,6 +76,7 @@ impl Snake {
     pub fn check_collision(&mut self, apple: &mut Apple) {
         if self.collides(apple) {
             apple.replace();
+            self.positions.push(self.position.clone());
         }
     }
 
