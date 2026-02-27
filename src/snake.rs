@@ -68,9 +68,20 @@ impl Snake {
     }
 
     pub fn check_collision(&mut self, apple: &mut Apple) {
-        if apple.position() == self.position() {
+        if self.collides(apple) {
             apple.replace();
         }
+    }
+
+    fn collides(&self, apple: &Apple) -> bool {
+        let (apple_x, apple_y) = apple.position();
+        let (player_x, player_y) = self.position();
+
+        if player_x.abs_diff(apple_x) < 2 && player_y == apple_y {
+            return true;
+        }
+
+        return false;
     }
 }
 
