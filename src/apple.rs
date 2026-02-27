@@ -1,8 +1,8 @@
+use crate::position::Position;
 use rand::{Rng, rngs::ThreadRng};
 
 pub struct Apple {
-    x: u16,
-    y: u16,
+    position: Position,
     random: ThreadRng,
     game_width: u16,
     game_height: u16,
@@ -13,23 +13,24 @@ impl Apple {
         let mut rng = rand::rng();
 
         Apple {
-            x: rng.random_range(2..width - 3),
-            y: rng.random_range(2..height - 2),
+            position: Position {
+                x: rng.random_range(2..width - 3),
+                y: rng.random_range(2..height - 2),
+            },
             random: rng,
             game_width: width,
             game_height: height,
         }
     }
 
-    pub fn position(&self) -> (u16, u16) {
-        return (self.x, self.y);
+    pub fn position(&self) -> Position {
+        return self.position.clone();
     }
 
     pub fn replace(&mut self) {
         let (x, y) = self.get_random_position();
 
-        self.x = x;
-        self.y = y;
+        self.position.set(x, y);
     }
 
     fn get_random_position(&mut self) -> (u16, u16) {

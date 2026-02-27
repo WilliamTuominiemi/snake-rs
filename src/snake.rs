@@ -1,44 +1,42 @@
-use crate::{apple::Apple, direction::Direction};
+use crate::{apple::Apple, direction::Direction, position::Position};
 
 pub struct Snake {
-    x: u16,
-    y: u16,
+    position: Position,
     direction: Direction,
 }
 
 impl Snake {
     pub fn new(x: u16, y: u16) -> Self {
         Snake {
-            x,
-            y,
+            position: Position { x, y },
             direction: Direction::Right,
         }
     }
 
-    pub fn position(&self) -> (u16, u16) {
-        return (self.x, self.y);
+    pub fn position(&self) -> Position {
+        return self.position.clone();
     }
 
     pub fn update_position(&mut self) {
         match self.direction {
-            Direction::Up => self.y -= 1,
-            Direction::Right => self.x += 1,
-            Direction::Down => self.y += 1,
-            Direction::Left => self.x -= 1,
+            Direction::Up => self.position.update(0, -1),
+            Direction::Right => self.position.update(1, 0),
+            Direction::Down => self.position.update(0, 1),
+            Direction::Left => self.position.update(-1, 0),
         }
     }
 
     pub fn keep_within_bounds(&mut self, width: u16, height: u16) {
-        if self.x == 0 {
-            self.x = width - 3;
-        } else if self.x >= width - 2 {
-            self.x = 1;
+        if self.position.x == 0 {
+            self.position.x = width - 3;
+        } else if self.position.x >= width - 2 {
+            self.position.x = 1;
         }
 
-        if self.y == 0 {
-            self.y = height - 2;
-        } else if self.y >= height - 1 {
-            self.y = 1;
+        if self.position.y == 0 {
+            self.position.y = height - 2;
+        } else if self.position.y >= height - 1 {
+            self.position.y = 1;
         }
     }
 
@@ -74,10 +72,11 @@ impl Snake {
     }
 
     fn collides(&self, apple: &Apple) -> bool {
-        let (apple_x, apple_y) = apple.position();
-        let (player_x, player_y) = self.position();
+        let apple_position = apple.position();
+        let player_position = self.position();
 
-        if player_x.abs_diff(apple_x) < 2 && player_y == apple_y {
+        if player_position.x.abs_diff(apple_position.x) < 2 && player_position.y == apple_position.y
+        {
             return true;
         }
 
@@ -98,10 +97,10 @@ mod tests {
 
         snake.update_position();
 
-        let (x, y) = snake.position();
+        let position = snake.position();
 
-        assert_eq!(x, start_x + 1);
-        assert_eq!(y, start_y);
+        assert_eq!(position.x, start_x + 1);
+        assert_eq!(position.y, start_y);
     }
 
     #[test]
@@ -114,19 +113,19 @@ mod tests {
 
         let mut snake_within_bounds = Snake::new(start_x, start_y);
         snake_within_bounds.keep_within_bounds(width, height);
-        let (x, y) = snake_within_bounds.position();
+        let position = snake_within_bounds.position();
 
-        assert_eq!(start_x, x);
-        assert_eq!(start_y, y);
+        assert_eq!(start_x, position.x);
+        assert_eq!(start_y, position.y);
 
         let start_x_outside = width;
         let start_y_outside = height;
 
         let mut snake_outside_bounds = Snake::new(start_x_outside, start_y_outside);
         snake_outside_bounds.keep_within_bounds(width, height);
-        let (x, y) = snake_outside_bounds.position();
+        let position = snake_outside_bounds.position();
 
-        assert_eq!(1, x);
-        assert_eq!(1, y);
+        assert_eq!(1, position.x);
+        assert_eq!(1, position.y);
     }
 }

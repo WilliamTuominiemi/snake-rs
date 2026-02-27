@@ -60,8 +60,8 @@ impl Game {
             self.draw(self.draw_apple(&mut stdout, &apple));
             self.draw(self.draw_player(
                 &mut stdout,
-                self.snake.position().0,
-                self.snake.position().1,
+                self.snake.position().x,
+                self.snake.position().y,
             ));
 
             self.update_player_position();
@@ -115,10 +115,10 @@ impl Game {
         stdout: &mut io::Stdout,
         apple: &Apple,
     ) -> Result<(), Box<dyn std::error::Error>> {
-        let (x, y) = apple.position();
+        let position = apple.position();
 
-        self.draw_pixel_at_position(stdout, x, y, Color::Red)?;
-        self.draw_pixel_at_position(stdout, x + 1, y, Color::Red)?;
+        self.draw_pixel_at_position(stdout, position.x, position.y, Color::Red)?;
+        self.draw_pixel_at_position(stdout, position.x + 1, position.y, Color::Red)?;
 
         Ok(())
     }

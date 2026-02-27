@@ -9,6 +9,8 @@ mod snake;
 
 mod apple;
 
+mod position;
+
 fn main() -> io::Result<()> {
     let mut game = Game::new();
     game.update()?;
