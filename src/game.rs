@@ -100,9 +100,14 @@ impl Game {
         stdout: &mut io::Stdout,
         positions: Vec<Position>,
     ) -> Result<(), Box<dyn std::error::Error>> {
-        for position in positions {
-            self.draw_pixel_at_position(stdout, position.x, position.y, Color::Blue)?;
-            self.draw_pixel_at_position(stdout, position.x + 1, position.y, Color::Blue)?;
+        for (i, position) in positions.iter().enumerate() {
+            let color = if i % 2 == 0 {
+                Color::Blue
+            } else {
+                Color::Magenta
+            };
+            self.draw_pixel_at_position(stdout, position.x, position.y, color)?;
+            self.draw_pixel_at_position(stdout, position.x + 1, position.y, color)?;
         }
 
         Ok(())
