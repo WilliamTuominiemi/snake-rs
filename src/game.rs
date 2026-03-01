@@ -40,16 +40,16 @@ impl Game {
         let mut apple = Apple::new(self.width, self.height);
 
         while !self.quit {
-            if event::poll(Duration::from_millis(100))? {
-                if let Event::Key(key_event) = event::read()? {
-                    match key_event.code {
-                        KeyCode::Char('q') => self.quit = true,
-                        KeyCode::Up => self.snake.change_direction(Direction::Up),
-                        KeyCode::Right => self.snake.change_direction(Direction::Right),
-                        KeyCode::Down => self.snake.change_direction(Direction::Down),
-                        KeyCode::Left => self.snake.change_direction(Direction::Left),
-                        _ => {}
-                    }
+            if event::poll(Duration::from_millis(100))?
+                && let Event::Key(key_event) = event::read()?
+            {
+                match key_event.code {
+                    KeyCode::Char('q') => self.quit = true,
+                    KeyCode::Up => self.snake.change_direction(Direction::Up),
+                    KeyCode::Right => self.snake.change_direction(Direction::Right),
+                    KeyCode::Down => self.snake.change_direction(Direction::Down),
+                    KeyCode::Left => self.snake.change_direction(Direction::Left),
+                    _ => {}
                 }
             }
 

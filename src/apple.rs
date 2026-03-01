@@ -24,7 +24,7 @@ impl Apple {
     }
 
     pub fn position(&self) -> Position {
-        return self.position.clone();
+        self.position.clone()
     }
 
     pub fn replace(&mut self) {

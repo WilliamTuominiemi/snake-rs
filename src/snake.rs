@@ -1,8 +1,4 @@
-use crate::{
-    apple::Apple,
-    direction::{self, Direction},
-    position::Position,
-};
+use crate::{apple::Apple, direction::Direction, position::Position};
 
 pub struct Snake {
     position: Position,
@@ -20,11 +16,11 @@ impl Snake {
     }
 
     pub fn position(&self) -> Position {
-        return self.position.clone();
+        self.position.clone()
     }
 
     pub fn nodes(&self) -> Vec<Position> {
-        return self.positions.clone();
+        self.positions.clone()
     }
 
     pub fn update_position(&mut self) {
@@ -93,7 +89,7 @@ impl Snake {
             return true;
         }
 
-        return false;
+        false
     }
 }
 
