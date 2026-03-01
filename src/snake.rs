@@ -74,13 +74,18 @@ impl Snake {
     }
 
     pub fn check_collision(&mut self, apple: &mut Apple) {
-        if self.collides(apple) {
+        if self.check_collision_with_apple(apple) {
             apple.replace();
-            self.positions.push(self.position.clone());
+            let tail = self.positions.last().unwrap().clone();
+            self.positions.push(tail);
+        }
+
+        if self.check_collision_with_self() {
+            self.reset();
         }
     }
 
-    fn collides(&self, apple: &Apple) -> bool {
+    fn check_collision_with_apple(&self, apple: &Apple) -> bool {
         let apple_position = apple.position();
         let player_position = self.position();
 
@@ -90,6 +95,22 @@ impl Snake {
         }
 
         false
+    }
+
+    fn check_collision_with_self(&self) -> bool {
+        let player_position = self.position();
+
+        for node in self.nodes().into_iter().skip(2) {
+            if player_position == node {
+                return true;
+            }
+        }
+
+        false
+    }
+
+    fn reset(&mut self) {
+        self.positions = vec![self.position.clone()];
     }
 }
 
