@@ -1,4 +1,8 @@
-use crate::{apple::Apple, direction::Direction, position::Position};
+use crate::{
+    apple::Apple,
+    direction::{self, Direction},
+    position::Position,
+};
 
 pub struct Snake {
     position: Position,
@@ -35,16 +39,16 @@ impl Snake {
     }
 
     pub fn keep_within_bounds(&mut self, width: u16, height: u16) {
-        if self.position.x == 0 {
-            self.position.x = width - 3;
-        } else if self.position.x >= width - 2 {
-            self.position.x = 1;
+        if self.position.x == 1 && self.direction == Direction::Left {
+            self.position.x = width - 2;
+        } else if self.position.x >= width - 3 && self.direction == Direction::Right {
+            self.position.x = 0;
         }
 
-        if self.position.y == 0 {
-            self.position.y = height - 2;
-        } else if self.position.y >= height - 1 {
-            self.position.y = 1;
+        if self.position.y == 1 && self.direction == Direction::Up {
+            self.position.y = height - 1;
+        } else if self.position.y == height - 2 && self.direction == Direction::Down {
+            self.position.y = 0;
         }
     }
 

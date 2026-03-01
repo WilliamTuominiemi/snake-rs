@@ -74,8 +74,8 @@ impl Game {
     }
 
     fn update_player_position(&mut self) {
-        self.snake.update_position();
         self.snake.keep_within_bounds(self.width, self.height);
+        self.snake.update_position();
     }
 
     fn draw_walls(
